@@ -1,0 +1,627 @@
+/* 화면 전체를 채우고 내용을 정중앙에 배치, 보라색 그라데이션 배경 */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #a960ee);
+}
+
+/* 카드형 컨테이너: 중앙 정렬, 최대 너비 500px */
+.container {
+  width: 100%;
+  max-width: 500px;
+  margin: 40px 20px;
+  padding: 40px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+/* 제목 스타일: 아이콘과 텍스트를 세로 중앙 정렬 */
+h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 28px;
+  font-weight: 800;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+/* 제목 앞 아이콘 */
+.title-icon {
+  margin-right: 8px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+/* 입력창 + 추가 버튼을 가로로 배치 */
+.input-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+/* 일정 입력창 */
+.input-area input {
+  flex: 1;
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 999px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+/* 입력창 포커스 시 테두리 강조 */
+.input-area input:focus {
+  border-color: #a960ee;
+}
+
+/* 추가 버튼: pill 형태, 그라데이션 배경 */
+.input-area button {
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6a11cb, #a960ee);
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(106, 17, 203, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 추가 버튼 hover 효과 */
+.input-area button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px rgba(106, 17, 203, 0.45);
+}
+
+/* 추가 버튼 클릭 효과 */
+.input-area button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(106, 17, 203, 0.35);
+}
+
+/* 구성원별 필터 버튼 영역 */
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* 필터 버튼 (이모지 + 이름), 토글식으로 중복 선택 가능. 배경은 달력 막대와 동일한 구성원별 색상(JS에서 inline 지정) */
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* 활성화된 필터 버튼: 배경색은 유지하고 테두리 강조로 선택 상태 표시 */
+.filter-btn.active {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #333333;
+}
+
+/* 일정 개수 표시 (전체/완료) */
+.todo-stats {
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  text-align: right;
+}
+
+/* 일정 목록: 기본 리스트 스타일 제거, 3개까지만 보이고 그 이상은 스크롤 */
+.todo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 190px;
+  overflow-y: auto;
+}
+
+/* 개별 일정 항목 */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: #f5f5f7;
+  font-size: 15px;
+  color: #333;
+}
+
+/* 완료 체크박스 */
+.todo-checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #a960ee;
+}
+
+/* 일정 텍스트: 남은 공간을 모두 차지 */
+.todo-text {
+  flex: 1;
+  word-break: break-all;
+  transition: color 0.15s ease;
+}
+
+/* 일정 항목에 마우스를 올리면 텍스트를 굵게 강조 표시 */
+.todo-item:hover .todo-text {
+  font-weight: 700;
+  color: #6a11cb;
+}
+
+/* 삭제 버튼 */
+.delete-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  background: #e74c3c;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.delete-btn:hover {
+  background: #c0392b;
+}
+
+/* 완료된 항목: 취소선 표시 및 흐린 색상 */
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* 달력 영역: 목록 아래쪽에 위치, 위쪽 구분선 */
+.calendar-section {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+/* 달력/팝업 공통 제목 (예: "2026년 7월") */
+.calendar-title {
+  margin: 0 0 14px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 이전/다음 달 버튼과 연/월 제목을 한 줄에 배치 */
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.calendar-nav .calendar-title {
+  margin: 0;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+/* 연/월 제목을 클릭하면 월 선택 팝업이 열림을 암시하는 hover 효과 */
+.calendar-nav .calendar-title:hover {
+  color: #6a11cb;
+}
+
+/* 이전/다음 달, 이전/다음 연도 이동 버튼 공통 스타일 */
+.calendar-nav-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #f5f5f7;
+  color: #6a11cb;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.calendar-nav-btn:hover {
+  background: #e9def7;
+}
+
+/* 요일/날짜 7열 그리드 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+/* 요일 헤더 (일~토) */
+.calendar-weekday {
+  text-align: center;
+  padding: 4px 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #999;
+}
+
+/* 날짜 한 칸 (더블클릭으로 일정 추가 가능하므로 기본적으로 포인터 커서) */
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  min-height: 54px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  background: #f5f5f7;
+  font-size: 12px;
+  color: #333;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+/* 일정 미리보기 목록: 칸에 다 안 들어가면 기본은 잘림, 마우스를 올리면 스크롤로 확인 */
+.day-todo-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: hidden;
+}
+
+.calendar-day:hover .day-todo-list {
+  overflow-y: auto;
+}
+
+.day-todo-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.day-todo-list::-webkit-scrollbar-thumb {
+  background: #c9b6ea;
+  border-radius: 4px;
+}
+
+/* 날짜 칸에 마우스를 올렸을 때 (더블클릭 힌트) */
+.calendar-day:not(.empty):hover {
+  background: #ececf3;
+}
+
+/* 날짜가 없는 빈 칸 (월 시작 전/끝 이후) */
+.calendar-day.empty {
+  background: transparent;
+  cursor: default;
+}
+
+/* 오늘 날짜 강조 */
+.calendar-day.today {
+  border: 2px solid #a960ee;
+}
+
+/* 기간 지정 중 시작 날짜로 선택된 칸 (Ctrl+클릭으로 종료일을 마저 선택하면 됨) */
+.calendar-day.range-start {
+  border: 2px dashed #6a11cb;
+  background: #f1e9fb;
+}
+
+/* 날짜 숫자 */
+.calendar-day .day-number {
+  font-weight: 700;
+}
+
+/* 날짜 칸에 표시되는 일정 미리보기 (하루짜리 일정) */
+.day-todo {
+  margin-top: 4px;
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #6a11cb, #a960ee);
+  color: white;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* 필터가 켜져 있을 때, 필터에 해당하지 않는 일정은 흐리게 표시 */
+.day-todo.dimmed {
+  opacity: 0.25;
+}
+
+/* 필터가 켜져 있을 때, 필터에 해당하는 일정은 테두리로 강조 */
+.day-todo.emphasized {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #333333;
+}
+
+/* 여러 날짜짜리 일정: 숙박이 있는 날짜(체크아웃 전날까지)에 걸쳐 이어진 막대로 표시 (구글 캘린더 스타일) */
+/* 날짜 칸과 같은 행에 겹쳐서 배치되므로, 칸 "안"에서 세로 중앙에 위치하도록 함 */
+.day-todo-bar {
+  margin: 0 2px;
+  align-self: center;
+  justify-self: stretch;
+  text-align: center;
+  cursor: default;
+}
+
+/* 팝업 공통 배경(오버레이) */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+}
+
+/* 열려 있는 팝업만 화면에 표시 */
+.modal-overlay.visible {
+  display: flex;
+}
+
+/* 팝업 카드 */
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 28px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+}
+
+/* 팝업 닫기(×) 버튼 */
+.modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+/* 안내 팝업 내용 중앙 정렬 (수정/삭제 팝업 등에서 사용) */
+.confirm-modal {
+  text-align: center;
+}
+
+.confirm-modal p {
+  margin: 0;
+  font-size: 15px;
+  color: #333;
+  word-break: break-all;
+}
+
+/* 예/아니오 버튼 배치 (버튼이 3개일 때는 줄바꿈 허용) */
+.confirm-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.confirm-buttons button {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.confirm-buttons button:hover {
+  transform: translateY(-2px);
+}
+
+/* 강조 버튼 (예 / 일정 추가) */
+.btn-primary {
+  color: white;
+  background: linear-gradient(135deg, #6a11cb, #a960ee);
+}
+
+/* 중립 버튼 (아니오 / 닫기) */
+.btn-neutral {
+  color: #333;
+  background: #e0e0e0;
+}
+
+/* 수정 버튼: 파란색 계열 */
+.btn-edit {
+  color: white;
+  background: linear-gradient(135deg, #2f80ed, #56ccf2);
+}
+
+/* 삭제 버튼: 빨간색 계열 (목록의 삭제 버튼과 동일 톤) */
+.btn-delete {
+  color: white;
+  background: #e74c3c;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
+}
+
+/* 날짜 상세 팝업의 일정 목록 */
+.day-detail-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* 날짜 상세 팝업의 일정 항목 (클릭하면 수정할 일정으로 선택됨) */
+.day-detail-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #f5f5f7;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, color 0.15s ease;
+}
+
+/* 일정 항목에 마우스를 올리면 텍스트를 굵게 강조 표시 */
+.day-detail-item:hover {
+  font-weight: 700;
+  color: #6a11cb;
+}
+
+/* 완료된 일정: 취소선 표시 */
+.day-detail-item.completed {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* 가족 구성원 선택 버튼들을 감싸는 영역 */
+.member-select-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* 가족 구성원 선택 버튼 (이모지 + 이름) */
+.member-select-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 64px;
+  padding: 14px 10px;
+  border: none;
+  border-radius: 14px;
+  background: #f5f5f7;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.member-select-btn:hover {
+  background: #e9def7;
+  transform: translateY(-2px);
+}
+
+/* 선택된 구성원 버튼 (중복 선택 가능, 여러 개 동시에 켜질 수 있음) */
+.member-select-btn.selected {
+  background: #e9def7;
+  box-shadow: 0 0 0 2px #a960ee inset;
+}
+
+/* 가족 구성원 선택 버튼의 이모지 */
+.member-select-emoji {
+  font-size: 26px;
+}
+
+/* 구성원 선택 완료 버튼 */
+.member-select-confirm-btn {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border: none;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.member-select-confirm-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* 월 선택 팝업의 연도 이동 영역 */
+.month-picker-year-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.month-picker-year-nav button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: #f5f5f7;
+  color: #6a11cb;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.month-picker-year-nav button:hover {
+  background: #e9def7;
+}
+
+#month-picker-year-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+}
+
+/* 12개월 버튼 그리드 */
+.month-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.month-picker-btn {
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  background: #f5f5f7;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.month-picker-btn:hover {
+  background: #ececf3;
+  transform: translateY(-2px);
+}
+
+/* 현재 달력에 표시 중인 달 강조 */
+.month-picker-btn.current {
+  background: linear-gradient(135deg, #6a11cb, #a960ee);
+  color: white;
+}

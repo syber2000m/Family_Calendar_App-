@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>우리 가족 일정표</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 할 일 목록 전체를 감싸는 카드형 컨테이너 -->
+  <div class="container">
+    <!-- 페이지 제목 (앞에 가족 아이콘 표시) -->
+    <h1><span class="title-icon" aria-hidden="true">📅</span>우리 가족 일정표</h1>
+
+    <!-- 구성원별 필터 버튼 -->
+    <div class="filter-buttons" id="filter-buttons"></div>
+
+    <!-- 일정 개수 표시 (전체/완료) -->
+    <div class="todo-stats" id="todo-stats"></div>
+
+    <!-- 일정 목록이 표시될 영역 (현재는 비어 있음) -->
+    <ul class="todo-list" id="todo-list"></ul>
+
+    <!-- 이번 달 달력 영역 -->
+    <div class="calendar-section">
+      <!-- 이전/다음 달 이동 버튼과, 클릭하면 월 선택 팝업이 뜨는 연/월 제목 -->
+      <div class="calendar-nav">
+        <button class="calendar-nav-btn" id="calendar-prev-month" aria-label="이전 달">◀</button>
+        <h2 class="calendar-title" id="calendar-title"></h2>
+        <button class="calendar-nav-btn" id="calendar-next-month" aria-label="다음 달">▶</button>
+      </div>
+      <div class="calendar-grid" id="calendar-grid"></div>
+    </div>
+  </div>
+
+  <!-- 달력 날짜 더블클릭 시 뜨는 일정 입력 팝업 -->
+  <div class="modal-overlay" id="quick-add-overlay">
+    <div class="modal">
+      <button class="modal-close-btn" id="quick-add-close" aria-label="닫기">×</button>
+      <h2 class="calendar-title" id="quick-add-title"></h2>
+      <div class="input-area">
+        <input type="text" id="quick-add-input" placeholder="일정을 입력 하세요" />
+        <button id="quick-add-btn">추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 일정이 있는 날짜를 더블클릭했을 때 뜨는 일정 내용 팝업 -->
+  <div class="modal-overlay" id="day-detail-overlay">
+    <div class="modal">
+      <h2 class="calendar-title" id="day-detail-title"></h2>
+      <ul class="day-detail-list" id="day-detail-list"></ul>
+      <div class="confirm-buttons">
+        <button id="day-detail-add" class="btn-primary">일정 추가</button>
+        <button id="day-detail-close" class="btn-neutral">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 일정 내용 팝업에서 일정 텍스트를 더블클릭했을 때 뜨는 수정/삭제 팝업 -->
+  <div class="modal-overlay" id="item-action-overlay">
+    <div class="modal confirm-modal">
+      <p id="item-action-text"></p>
+      <div class="confirm-buttons">
+        <button id="item-action-edit" class="btn-edit">수정</button>
+        <button id="item-action-delete" class="btn-delete">삭제</button>
+        <button id="item-action-close" class="btn-neutral">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 연/월 제목 클릭 시 뜨는 월 선택 팝업 -->
+  <div class="modal-overlay" id="month-picker-overlay">
+    <div class="modal">
+      <button class="modal-close-btn" id="month-picker-close" aria-label="닫기">×</button>
+      <div class="month-picker-year-nav">
+        <button id="month-picker-prev-year" aria-label="이전 연도">◀</button>
+        <span id="month-picker-year-label"></span>
+        <button id="month-picker-next-year" aria-label="다음 연도">▶</button>
+      </div>
+      <div class="month-picker-grid" id="month-picker-grid"></div>
+    </div>
+  </div>
+
+  <!-- 일정 저장 전, 누구의 일정인지 선택하는 팝업 (여러 명 중복 선택 가능) -->
+  <div class="modal-overlay" id="member-select-overlay">
+    <div class="modal">
+      <h2 class="calendar-title">누구의 일정인가요?</h2>
+      <div class="member-select-buttons" id="member-select-buttons"></div>
+      <button id="member-select-confirm" class="btn-primary member-select-confirm-btn">선택 완료</button>
+    </div>
+  </div>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
